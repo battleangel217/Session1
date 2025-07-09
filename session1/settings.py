@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'products',
+    'games',
 ]
 
 MIDDLEWARE = [
@@ -77,12 +78,18 @@ WSGI_APPLICATION = 'session1.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'mafiagame_database',
+        'HOST': 'dpg-d1kjgevdiees73ekaoig-a.oregon-postgres.render.com',
+        'USER': 'mafiagame_database_user',
+        'PORT': '5432',
+        'PASSWORD': 'JhN9lU7Iwfeq5e2DfOznpiDo44p3lvKx'
+
+    },
+
 }
 
-
+#  HOST, USER , PORT , PASSWORD
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 

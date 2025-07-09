@@ -1,11 +1,12 @@
 from django.db import models
+from django.db.models import Count, Avg, Max
 
 class Products(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     price = models.DecimalField(max_digits=6, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField()
+    updated_at = models.DateField()
     
 
 
@@ -19,8 +20,16 @@ class Students(models.Model):
 
 
 class CustomUser(models.Model):
-    email =models.EmailField(max_length=100, unique=True)
+    email =models.EmailField(max_length=100)
     username = models.CharField(max_length=100)
+
+    class Meta:
+        unique_together = ['email', 'username']
+
+    def details(self):
+        return f"{self.email}: {self.username}"
+    def __str__(self):
+        return f"{self.email}: {self.username}"
     
 
 class Profile(models.Model):
@@ -30,7 +39,7 @@ class Profile(models.Model):
 
 
 class UserAuthentication(models.Model):
-    user_name = models.CharField(max_length=100)
+    user_name = models.CharField(max_length=100, unique=True)
 
 
 class Courses(models.Model):
@@ -43,9 +52,10 @@ class Teacher(models.Model):
 
 class Course(models.Model):
     name = models.CharField(max_length=100)
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
 
 class StudentsEnrolled(models.Model):
     name = models.CharField(max_length=100)
-    age = models.IntegerField(default=17)
-    student = models.ManyToManyField(Course)
+    student = models.ManyToManyField(Course, related_name="students")
+    school = models.ForeignKey(School, on_delete=models.CASCADE)
+
+    
