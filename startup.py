@@ -150,11 +150,12 @@ class MafiaVoteout():
 
         #Continuously updates players that joining till the admin starts the game
         while start == "Open":
-            complete = Player.objects.count()
+            complete = Player.objects.filter(room_id=self.code_no).count()
             if n != complete:
                 new = Player.objects.filter(room_id=self.code_no).order_by('id')[n:complete]
                 for i in new:
                     print(f"{i.username} joined")
+
                 n = complete
             start = Room.objects.get(code = self.code_no).started
             time.sleep(1)
@@ -272,8 +273,7 @@ class MafiaVoteout():
                 else:
                     #Ends game if the mafia has been eliminated
                     print("You guys eliminated the mafia!! You winn")
-                    if players.get(status="Mafia").username == self.username:
-                        Room.objects.get(code=self.code_no).delete()
+                    Room.objects.get(code=self.code_no).delete()
                     exit()
 
                 #Game ends if they are only 2 players left
@@ -281,7 +281,8 @@ class MafiaVoteout():
                 if players.count() == 2:
                     if players.get(status="Mafia").username == self.username:
                         print("You win! 🎉🎊")
-                        Room.objects.get(code=self.code_no).delete()
+                        if players.first() == self.username:
+                            Room.objects.get(code=self.code_no).delete()
                         exit()
                     else:
                         print(f"{players.get(status="Mafia").username} was the mafia! 😂\nYou lose")
